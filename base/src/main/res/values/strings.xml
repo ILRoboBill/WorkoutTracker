@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">WorkoutTracker</string>
+
+    <string-array name="Workouts">
+        <item>Row</item>
+        <item>Chest Press</item>
+        <item>Twister</item>
+    </string-array>
+</resources>
