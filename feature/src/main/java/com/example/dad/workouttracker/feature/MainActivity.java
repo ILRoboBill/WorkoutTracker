@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         np.setMinValue(0);
         np.setMaxValue(valueSet.length - 1);
 
-        np.setDisplayedValues(valueSet);
+        np.setDisplayedValues(valueSet); // Added line to get a commit
         np.setWrapSelectorWheel(false);  // Do not want the selector wheel to wrap around
 
         np.setValue(idxStartValue);  // Set to the last known good value or the lowest
