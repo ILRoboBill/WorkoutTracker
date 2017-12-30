@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">WorkoutTracker</string>
+    <string name="weight">Weight</string>
+    <string name="repititions">Repititions</string>
+    <string name="set_1">Set 1</string>
+    <string name="set_2">Set 2</string>
+    <string name="btnSkip">Skip</string>
+    <string name="btnStore">Store</string>
+
 
     <string-array name="Workouts">
         <item>Row</item>
