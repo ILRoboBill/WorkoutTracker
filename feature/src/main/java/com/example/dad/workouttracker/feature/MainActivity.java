@@ -1,12 +1,18 @@
 package com.example.dad.workouttracker.feature;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     NumberPicker npSetRep1 = null;
@@ -14,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     NumberPicker npSetWeight1 = null;
     NumberPicker npSetWeight2 = null;
 
+    private static final String myEquipmentPreferences= "MyWeightPrefs";
+    private static final String keyEQUIPMENT_LIST = "EquipmentList";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // TODO: add the ability to pull Excercises from stored memory
         // TODO: add the ability to store Excercises to memory
         // TODO: remove hard coding of excercises
+        // Temporary Initialize Weight Equipment
+        TempWriteEquipmentList();
+
 
        // WeightChanger(50, 100, 5,70,R.id.npSet1Weight);
         // Initialize the components
@@ -82,7 +93,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void addListenerOnSpinnerItemSelection() {
-        Spinner spinner1 = (Spinner) findViewById(R.id.spnrExcercises);
+        Spinner spinner1 = findViewById(R.id.spnrExcercises);
+
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,GetListOfEquipment());
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner1.setAdapter(aa);
+
         spinner1.setOnItemSelectedListener(this);
     }
 
@@ -93,8 +109,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.d("WeightChangeListener:onItemSelected","On Item Selected:" + SelectedWeight);
         Log.d("WeightChangeListener::OnItemSelected","Id:" + R.id.npSet1Weight);
 
-        npSetWeight1 = (NumberPicker)findViewById(R.id.npSet1Weight);
-        npSetWeight2 = (NumberPicker)findViewById(R.id.npSet2Weight);
+        npSetWeight1 = findViewById(R.id.npSet1Weight);
+        npSetWeight2 = findViewById(R.id.npSet2Weight);
 
         if(SelectedWeight.equalsIgnoreCase("Chest Press")){
             WeightChanger(50,200,5,190,npSetWeight1);
@@ -111,5 +127,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    /**
+     * This function reads the List of Equipment that are being used for excercise.
+     * @return - ArrayList of equipment
+     */
+    protected List<String> GetListOfEquipment(){
+        SharedPreferences EquipmentInfo = getSharedPreferences(myEquipmentPreferences, Context.MODE_PRIVATE);
+        String EquipmentStringList[] = EquipmentInfo.getString(keyEQUIPMENT_LIST, "None").split(",");
+        List<String> EquipmentList = new ArrayList<>();
+
+        for (String Equipment : EquipmentStringList) EquipmentList.add(Equipment);
+
+        return EquipmentList;
+    }
+
+    protected void TempWriteEquipmentList(){
+        SharedPreferences EquipmentInfo = getSharedPreferences(myEquipmentPreferences, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = EquipmentInfo.edit();
+        editor.putString(keyEQUIPMENT_LIST,"Chest Press,Shoulder Press,Abdominal,Row-Rear Deltoid,Pulldown,Fly,Triceps Press,Torso Rotation,Hip Adduction,Hip Abduction,Back Extension");
+        editor.commit();
     }
 }
