@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
@@ -51,6 +52,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         WeightChanger(50, 100,5,95, npSetWeight2);
 
         addListenerOnSpinnerItemSelection();
+
+        Button btnStoreAndAdvance = (Button) findViewById(R.id.btnStore);
+        btnStoreAndAdvance.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Find out which equipment was just used and save the value
+                Spinner spinner1 = findViewById(R.id.spnrExcercises);
+                String Equipment = spinner1.getSelectedItem().toString();
+                EquipmentWorkoutData WorkoutData = new EquipmentWorkoutData();
+                WorkoutData.setRepSet1(npSetRep1.getValue());
+                WorkoutData.setRepSet2(npSetRep2.getValue());
+                WorkoutData.setWorkoutSet1(Integer.parseInt(npSetWeight1.getDisplayedValues()[npSetWeight1.getValue()]));
+                WorkoutData.setWorkoutSet2(Integer.parseInt(npSetWeight2.getDisplayedValues()[npSetWeight2.getValue()]));
+
+                StoreWorkoutData(Equipment, WorkoutData);
+
+                // Advance to the next piece of equipment
+                if (spinner1.getAdapter().getCount() > spinner1.getSelectedItemPosition() ){
+                    spinner1.setSelection(spinner1.getSelectedItemPosition()+1,true);
+                }
+
+
+            }
+        });
+
+
 
     }
 
@@ -110,16 +136,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.d("WeightChangeListener:onItemSelected","On Item Selected:" + SelectedWeight);
         Log.d("WeightChangeListener::OnItemSelected","Id:" + R.id.npSet1Weight);
 
-        int WeightSet1 =0;
-        int WeightSet2 = 0;
-        int RepSet1 = 0;
-        int RepSet2 = 0;
+        EquipmentWorkoutData workoutData = PopulateWorkoutData(SelectedWeight);
 
-        PopulateWorkoutData(SelectedWeight, WeightSet1, WeightSet2, RepSet1, RepSet2);
-        WeightChanger(50,200,5,WeightSet1, npSetWeight1);
-        WeightChanger( 50,200,5,WeightSet2, npSetWeight2);
-        SetupRepitions( RepSet1, npSetRep1);
-        SetupRepitions( RepSet2, npSetRep2);
+        WeightChanger(50,200,5,workoutData.getWorkoutSet1(), npSetWeight1);
+        WeightChanger( 50,200,5,workoutData.getWorkoutSet2(), npSetWeight2);
+        SetupRepitions( workoutData.getRepSet1(), npSetRep1);
+        SetupRepitions( workoutData.getRepSet2(), npSetRep2);
 
     }
 
@@ -146,27 +168,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         SharedPreferences EquipmentInfo = getSharedPreferences(myEquipmentPreferences, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = EquipmentInfo.edit();
         editor.putString(keyEQUIPMENT_LIST,"Chest Press,Shoulder Press,Abdominal,Row-Rear Deltoid,Pulldown,Fly,Triceps Press,Torso Rotation,Hip Adduction,Hip Abduction,Back Extension");
-        editor.commit();
+        editor.apply();
     }
 
-    protected void PopulateWorkoutData(String Equipment, int WeightSet1, int WeightSet2, int RepSet1, int RepSet2){
+    protected EquipmentWorkoutData PopulateWorkoutData(String Equipment) {
         SharedPreferences EquipmentInfo = getSharedPreferences(myEquipmentPreferences, Context.MODE_PRIVATE);
-        Set<String> WorkoutData = EquipmentInfo.getStringSet(Equipment, null);
-        if (null == WorkoutData){
-            WeightSet1= 50;
-            WeightSet2= 50;
-            RepSet1 = 15;
-            RepSet2 = 15;
-        }
-        else{
-            List<String> WorkoutDataList = new ArrayList<String>(WorkoutData);
-            WeightSet1 = Integer.parseInt(WorkoutDataList.get(0));
-            WeightSet2 = Integer.parseInt(WorkoutDataList.get(1));
-            RepSet1 = Integer.parseInt(WorkoutDataList.get(2));
-            RepSet2 = Integer.parseInt(WorkoutDataList.get(3));
+        String WorkoutDataList = EquipmentInfo.getString(Equipment, null);
 
-        }
+        EquipmentWorkoutData WorkoutData = new EquipmentWorkoutData();
+        if (null != WorkoutDataList) WorkoutData.putStringTokenized(WorkoutDataList);
+        return WorkoutData;
+    }
 
+    public void StoreWorkoutData(String Equipment, EquipmentWorkoutData WorkoutData){
+        SharedPreferences EquipmentInfo = getSharedPreferences(myEquipmentPreferences, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = EquipmentInfo.edit();
 
+        editor.putString(Equipment, WorkoutData.getTokenizedString());
+
+        editor.apply();
     }
 }
