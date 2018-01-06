@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
         Log.d("MainActivity:OnCreate","Did this actually work?");
 
-        // TODO: add the ability to pull Excercises from stored memory
-        // TODO: add the ability to store Excercises to memory
         // TODO: remove hard coding of excercises
         // Temporary Initialize Weight Equipment
         TempWriteEquipmentList();
@@ -167,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void TempWriteEquipmentList(){
         SharedPreferences EquipmentInfo = getSharedPreferences(myEquipmentPreferences, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = EquipmentInfo.edit();
-        editor.putString(keyEQUIPMENT_LIST,"Chest Press,Shoulder Press,Abdominal,Row-Rear Deltoid,Pulldown,Fly,Triceps Press,Torso Rotation,Hip Adduction,Hip Abduction,Back Extension");
+        editor.putString(keyEQUIPMENT_LIST,"Shoulder Press,Chest Press,Abdominal,Row-Rear Deltoid,Pulldown,Fly,Triceps Press,Torso Rotation,Hip Adduction,Hip Abduction,Back Extension");
         editor.apply();
     }
 
