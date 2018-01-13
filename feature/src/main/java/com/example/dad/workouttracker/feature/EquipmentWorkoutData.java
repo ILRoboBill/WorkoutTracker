@@ -1,9 +1,6 @@
 package com.example.dad.workouttracker.feature;
 
 
-import android.util.Log;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Dad on 12/31/2017.
@@ -14,6 +11,12 @@ public class EquipmentWorkoutData {
     private int WorkoutSet2 = 50;
     private int RepSet1 = 15;
     private int RepSet2 = 15;
+    private int initialWorkoutSet1 = 0;
+    private int initialWorkoutSet2 = 0;
+    private int initialRepSet1 = 0;
+    private int initialRepSet2 = 0;
+    private int repeatedSets = 0;
+
 
     private static final String myEquipmentPreferences= "MyWeightPrefs";
     private static final String keyEQUIPMENT_LIST = "EquipmentList";
@@ -50,22 +53,59 @@ public class EquipmentWorkoutData {
         return WorkoutSet2;
     }
 
+
     public String getTokenizedString() {
+
+        //Determine if workout is the same
+        if ( (initialRepSet1 == RepSet1) &&
+                (initialRepSet2 == RepSet2) &&
+                (initialWorkoutSet1 == WorkoutSet1) &&
+                (initialWorkoutSet2 == WorkoutSet2)){
+            repeatedSets++;
+        }
+        else {
+            repeatedSets = 1;
+        }
         String WorkoutInfo = Integer.toString(WorkoutSet1);
         WorkoutInfo += "," + Integer.toString(WorkoutSet2);
         WorkoutInfo += "," + Integer.toString(RepSet1);
         WorkoutInfo += "," + Integer.toString(RepSet2);
+        WorkoutInfo += "," + Integer.toString(repeatedSets);
 
         return WorkoutInfo;
     }
 
     public void putStringTokenized(String delimitedWorkoutInfo){
         String WorkoutInfo[] = delimitedWorkoutInfo.split(",");
-        setWorkoutSet1(Integer.parseInt(WorkoutInfo[0]));
-        setWorkoutSet2(Integer.parseInt(WorkoutInfo[1]));
-        setRepSet1(Integer.parseInt(WorkoutInfo[2]));
-        setRepSet2(Integer.parseInt(WorkoutInfo[3]));
+        initialWorkoutSet1 = WorkoutSet1 = Integer.parseInt(WorkoutInfo[0]);
+        initialWorkoutSet2 = WorkoutSet2 = Integer.parseInt(WorkoutInfo[1]);
+        initialRepSet1 = RepSet1 = Integer.parseInt(WorkoutInfo[2]);
+        initialRepSet2 = RepSet2 = Integer.parseInt(WorkoutInfo[3]);
+
+        //  Added to support the addition of the RepeatedSets
+        if (WorkoutInfo.length > 4){
+            repeatedSets = Integer.parseInt(WorkoutInfo[4]);
+        }
+        else {
+            repeatedSets = 1;
+        }
 
         return;
+    }
+
+    public String GetMotivationalMessage(){
+        String motivationalMessage;
+
+        motivationalMessage = "You have done this " + repeatedSets;
+        if (repeatedSets > 1){
+            motivationalMessage += " time before";
+        }
+        else{
+            motivationalMessage += " times before";
+        }
+
+
+        return motivationalMessage;
+
     }
 }

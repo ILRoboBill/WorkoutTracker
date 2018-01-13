@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     NumberPicker npSetRep2 = null;
     NumberPicker npSetWeight1 = null;
     NumberPicker npSetWeight2 = null;
+    TextView tvMotivationalMessage = null;
 
     private static final String myEquipmentPreferences= "MyWeightPrefs";
     private static final String keyEQUIPMENT_LIST = "EquipmentList";
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         npSetRep2 =findViewById(R.id.npSet2Reps);
         npSetWeight1 = findViewById(R.id.npSet1Weight);
         npSetWeight2 = findViewById(R.id.npSet2Weight);
+        tvMotivationalMessage = findViewById(R.id.txtMotivationalMessage);
 
 
         // Initialize the Number Pickes
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         WeightChanger( 50,200,5,workoutData.getWorkoutSet2(), npSetWeight2);
         SetupRepitions( workoutData.getRepSet1(), npSetRep1);
         SetupRepitions( workoutData.getRepSet2(), npSetRep2);
+        tvMotivationalMessage.setText(workoutData.GetMotivationalMessage());
 
     }
 
@@ -162,6 +166,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return EquipmentList;
     }
 
+    /***
+     * TODO: This needs to be removed once a method to enter the data manually
+     */
     protected void TempWriteEquipmentList(){
         SharedPreferences EquipmentInfo = getSharedPreferences(myEquipmentPreferences, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = EquipmentInfo.edit();
