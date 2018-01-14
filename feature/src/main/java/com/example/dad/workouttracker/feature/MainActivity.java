@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     NumberPicker npSetRep1 = null;
@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 StoreWorkoutData(Equipment, WorkoutData);
 
                 // Advance to the next piece of equipment
-                if (spinner1.getAdapter().getCount() > spinner1.getSelectedItemPosition() ){
+                Log.d("**** setOnClickListener::onClick","Get Count " + spinner1.getAdapter().getCount() + " Selected Position " + spinner1.getSelectedItemPosition() );
+                if (spinner1.getAdapter().getCount() > spinner1.getSelectedItemPosition() + 1 ){
                     spinner1.setSelection(spinner1.getSelectedItemPosition()+1,true);
                 }
 
@@ -181,7 +182,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String WorkoutDataList = EquipmentInfo.getString(Equipment, null);
 
         EquipmentWorkoutData WorkoutData = new EquipmentWorkoutData();
-        if (null != WorkoutDataList) WorkoutData.putStringTokenized(WorkoutDataList);
+        // if (null != WorkoutDataList)
+            WorkoutData.putStringTokenized(WorkoutDataList);
         return WorkoutData;
     }
 
