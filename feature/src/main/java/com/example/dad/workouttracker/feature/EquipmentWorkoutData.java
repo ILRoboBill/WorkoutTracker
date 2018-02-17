@@ -57,15 +57,22 @@ public class EquipmentWorkoutData {
 
     public String getTokenizedString() {
 
-        //Determine if workout is the same
+        //To encourage increasing the weight of workouts.  Count the number of times that a workout is the same
+        Log.d("**** EquipmentWorkoutData::getTokenizedString","Rep 1 = " + Integer.toString(initialRepSet1) + "!!" + Integer.toString(RepSet1) );
+        Log.d("**** EquipmentWorkoutData::getTokenizedString","Rep 1 = " + Integer.toString(initialRepSet2) + "!!" + Integer.toString(RepSet2) );
+        Log.d("**** EquipmentWorkoutData::getTokenizedString","Rep 1 = " + Integer.toString(initialWorkoutSet1) + "!!" + Integer.toString(WorkoutSet1) );
+        Log.d("**** EquipmentWorkoutData::getTokenizedString","Rep 1 = " + Integer.toString(initialWorkoutSet2) + "!!" + Integer.toString(WorkoutSet2) );
         if ( (initialRepSet1 == RepSet1) &&
                 (initialRepSet2 == RepSet2) &&
                 (initialWorkoutSet1 == WorkoutSet1) &&
                 (initialWorkoutSet2 == WorkoutSet2)){
+
             repeatedSets++;
+            Log.d("**** EquipmentWorkoutData::getTokenizedString","repeated sets increase = " + Integer.toString(repeatedSets) );
         }
         else {
             repeatedSets = 1;
+            Log.d("**** EquipmentWorkoutData::getTokenizedString","No Change" );
         }
         String WorkoutInfo = Integer.toString(WorkoutSet1);
         WorkoutInfo += "," + Integer.toString(WorkoutSet2);
@@ -88,9 +95,11 @@ public class EquipmentWorkoutData {
             initialRepSet1 = RepSet1 = Integer.parseInt(WorkoutInfo[2]);
             initialRepSet2 = RepSet2 = Integer.parseInt(WorkoutInfo[3]);
 
+            Log.d("**** EquipmentWorkoutData::putStringTokenized", "length of data =" + Integer.toString(WorkoutInfo.length));
             //  Added to support the addition of the RepeatedSets
             if (WorkoutInfo.length > 4) {
                 repeatedSets = Integer.parseInt(WorkoutInfo[4]);
+
             }
             if (repeatedSets < 1) {
                 repeatedSets = 1;
