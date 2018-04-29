@@ -54,6 +54,8 @@ public class EquipmentWorkoutData {
         return WorkoutSet2;
     }
 
+    public int getRepeatedSets() { return repeatedSets; }
+
 
     public String getTokenizedString() {
 

@@ -70,8 +70,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 // Advance to the next piece of equipment
                 Log.d("**** setOnClickListener::onClick","Get Count " + spinner1.getAdapter().getCount() + " Selected Position " + spinner1.getSelectedItemPosition() );
-                if (spinner1.getAdapter().getCount() > spinner1.getSelectedItemPosition() + 1 ){
-                    spinner1.setSelection(spinner1.getSelectedItemPosition()+1,true);
+                if (spinner1.getAdapter().getCount() > spinner1.getSelectedItemPosition() + 1 ) {
+                    spinner1.setSelection(spinner1.getSelectedItemPosition() + 1, true);
+                }
+                else{
+                    tvMotivationalMessage.setText(workoutData.GetMotivationalMessage());
                 }
 
 
@@ -140,8 +143,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         workoutData = PopulateWorkoutData(SelectedWeight);
 
-        WeightChanger(50,200,5,workoutData.getWorkoutSet1(), npSetWeight1);
-        WeightChanger( 50,200,5,workoutData.getWorkoutSet2(), npSetWeight2);
+        WeightChanger(50,305,5,workoutData.getWorkoutSet1(), npSetWeight1);
+        WeightChanger( 50,305,5,workoutData.getWorkoutSet2(), npSetWeight2);
         SetupRepitions( workoutData.getRepSet1(), npSetRep1);
         SetupRepitions( workoutData.getRepSet2(), npSetRep2);
         tvMotivationalMessage.setText(workoutData.GetMotivationalMessage());
